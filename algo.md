@@ -1,6 +1,8 @@
 # 常用操作
 
 ```java
+// java.lang.Character
+
 isLetter(char ch)
 判断是否是字母（A-Z, a-z）
 isDigit(char ch)
@@ -139,6 +141,27 @@ private boolean check(char c) {
 ```
 
 
+
+https://leetcode.cn/problems/container-with-most-water/description/
+
+盛最多水的容器
+
+```java
+public int maxArea(int[] height) {
+    int left = 0;
+    int right = height.length - 1;
+    int res = 0;
+    while (left < right) {
+        res = Math.max(res, Math.min(height[left], height[right]) * (right - left));
+        if (height[left] < height[right]) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+    return res;
+}
+```
 
 
 
