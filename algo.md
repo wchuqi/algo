@@ -1,56 +1,154 @@
+leetcode已完成题目
+
+https://leetcode.cn/problem-list/6uaxYMyj/
+
+
+
+参考：
+
+https://algo.itcharge.cn/01_array/01_15_array_two_pointers/#_5-%E5%8F%8C%E6%8C%87%E9%92%88%E6%80%BB%E7%BB%93
+
+
+
+https://programmercarl.com/0027.%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0.html#%E5%85%B6%E4%BB%96%E8%AF%AD%E8%A8%80%E7%89%88%E6%9C%AC
+
+
+
+
+
+
+
 # 常用操作
+
+```java
+public static void main(String[] args) {
+    // List<Integer> -> new int[]
+    List<Integer> integerList = Arrays.asList(1, 2, 3, 4, 5);
+    int[] intArray = integerList.stream().mapToInt(Integer::intValue).toArray();
+    System.out.println(Arrays.toString(intArray));
+    // List<String> -> new String[]
+    List<String> list = Arrays.asList("A", "B", "C");
+    String[] array = list.stream().toArray(String[]::new);
+    System.out.println(Arrays.toString(array));
+    // new int[] -> List<Integer>
+    int[] intArr = {1, 2, 3};
+    List<Integer> intList = Arrays.stream(intArr).boxed().collect(Collectors.toList());
+    System.out.println(intList);
+}
+```
+
+
 
 ```java
 // java.lang.Character
 
-isLetter(char ch)
-判断是否是字母（A-Z, a-z）
-isDigit(char ch)
-判断是否是数字（0-9）
-isWhitespace(char ch)
-判断是否是空白字符（空格、换行、制表符等）
-isLetterOrDigit(char ch)
-是否是字母或数字
+char c = 'a';
+System.out.println(Character.isLetter(c)); // 判断是否是字母（A-Z, a-z）
+System.out.println(Character.isDigit(c)); // 判断是否是数字（0-9）
+System.out.println(Character.isWhitespace(c)); // 判断是否是空白字符（空格、换行、制表符等）
+System.out.println(Character.isLetterOrDigit(c)); // 是否是字母或数字
 
-isUpperCase(char ch)
-是否是大写字母
-isLowerCase(char ch)
-是否是小写字母
+System.out.println(Character.isUpperCase(c)); // 是否是大写字母
+System.out.println(Character.isLowerCase(c)); // 是否是小写字母
 
-toLowerCase(char ch)
-将大写字符转为小写
-toUpperCase(char ch)
-将小写字符转为大写
+System.out.println(Character.toLowerCase(c)); // 将大写字符转为小写
+System.out.println(Character.toUpperCase(c)); // 将小写字符转为大写
 
-compare(char x, char y)
+char x = '1';
+char y = 'a';
+/*
 比较两个字符的 Unicode 值大小
 返回值 < 0 表示 x < y
 返回值 == 0 表示 x == y
 返回值 > 0 表示 x > y
-    
-charValue()
-获取封装的 char 值（用于对象）
-getNumericValue(char ch)
-获取字符对应的数值（如 '5' → 5，'A' → 10（十六进制））
-eg:
-Character obj = '7';
-System.out.println("charValue()：" + obj.charValue()); // 7
-char hexChar = 'F';
-System.out.println("getNumericValue('F')：" + Character.getNumericValue(hexChar)); // 15
+*/
+System.out.println(Character.compare(x, y));
 
-toString(char c)
-返回指定字符的字符串形式
-digit(int codePoint, int radix)
-在指定进制下返回字符对应的数值
-forDigit(int digit, int radix)
-返回指定进制下对应数字的字符表示
-eg:
-System.out.println("toString('X')：" + Character.toString('X')); // "X"
-int value = Character.digit('A', 16);
-System.out.println("digit('A', 16)：" + value); // 10
-char hex = Character.forDigit(12, 16);
-System.out.println("forDigit(12, 16)：" + hex); // 'c'
+Character obj = '7';
+System.out.println(obj.charValue()); // 7 获取封装的 char 值（用于对象）
+System.out.println(Character.getNumericValue('A')); // 10 获取字符对应的数值（如 '5' → 5，'A' → 10（十六进制））
+
+System.out.println(Character.toString('A')); // 返回指定字符的字符串形式
+System.out.println(Character.digit('A', 10)); // 在指定进制下返回字符对应的数值
+System.out.println(Character.forDigit('A', 10)); // 返回指定进制下对应数字的字符表示
 ```
+
+
+
+# 二分查找
+
+**有序**数组查找特定元素
+
+**减而治之**
+
+
+
+基本用法
+
+```java
+int binary_search(int[] nums, int target) {
+    int left = 0, right = nums.length - 1; 
+    while(left <= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] < target) {
+            left = mid + 1;
+        } else if (nums[mid] > target) {
+            right = mid - 1; 
+        } else if(nums[mid] == target) {
+            // 直接返回
+            return mid;
+        }
+    }
+    // 直接返回
+    return -1;
+}
+
+int left_bound(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] < target) {
+            left = mid + 1;
+        } else if (nums[mid] > target) {
+            right = mid - 1;
+        } else if (nums[mid] == target) {
+            // 别返回，锁定左侧边界
+            right = mid - 1;
+        }
+    }
+    // 最后要检查 left 越界的情况
+    if (left >= nums.length || nums[left] != target)
+        return -1;
+    return left;
+}
+
+
+int right_bound(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] < target) {
+            left = mid + 1;
+        } else if (nums[mid] > target) {
+            right = mid - 1;
+        } else if (nums[mid] == target) {
+            // 别返回，锁定右侧边界
+            left = mid + 1;
+        }
+    }
+    // 最后要检查 right 越界的情况
+    if (right < 0 || nums[right] != target)
+        return -1;
+    return right;
+}
+
+作者：labuladong
+链接：https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/solutions/13230/er-fen-cha-zhao-suan-fa-xi-jie-xiang-jie-by-labula/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+
 
 
 
@@ -171,9 +269,9 @@ public int maxArea(int[] height) {
 
 ### 分离指针（分属不同结构）
 
+​				
 
-
-
+​		
 
  
 
